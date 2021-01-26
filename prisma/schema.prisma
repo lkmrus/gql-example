@@ -20,18 +20,6 @@ model comments {
   @@index([body], name: "username")
 }
 
-model knex_migrations {
-  id             Int       @id @default(autoincrement())
-  name           String?
-  batch          Int?
-  migration_time DateTime?
-}
-
-model knex_migrations_lock {
-  index     Int  @id @default(autoincrement())
-  is_locked Int?
-}
-
 model posts {
   id         Int      @id @default(autoincrement())
   user_id    Int?
@@ -56,4 +44,11 @@ model users {
   @@index([email], name: "email")
   @@index([name], name: "name")
   @@index([username], name: "username")
+}
+
+model photos {
+    id         Int      @id @default(autoincrement())
+    filename       String?  @unique
+    updated_at DateTime @default(now())
+    created_at DateTime @default(now())
 }

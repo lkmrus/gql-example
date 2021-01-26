@@ -3,15 +3,33 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  },
   "dependencies": {
-    "@prisma/client": "^2.15.0"
+    "@prisma/client": "^2.15.0",
+    "apollo-server-express": "^2.19.2",
+    "bcrypt": "^5.0.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "graphql-iso-date": "^3.6.1",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
-    "@prisma/cli": "^2.15.0"
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/node": "^7.12.10",
+    "@babel/preset-env": "^7.12.11",
+    "@prisma/cli": "^2.15.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-prettier": "^3.3.1"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "nodemon": ""
+    "start": "babel-node ./build/index.js",
+    "watch": "nodemon ./src/index --exec babel-node",
+    "build": "babel src -d build"
   },
   "repository": {
     "type": "git",
