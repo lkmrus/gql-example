@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model comments {
+  id         Int      @id @default(autoincrement())
+  post_id    Int?
+  name       String?
+  email      String?  @default("")
+  body       String?
+  created_at DateTime @default(now())
+
+  @@index([name], name: "name")
+  @@index([post_id], name: "post_id")
+  @@index([body], name: "username")
+}
+
+model knex_migrations {
+  id             Int       @id @default(autoincrement())
+  name           String?
+  batch          Int?
+  migration_time DateTime?
+}
+
+model knex_migrations_lock {
+  index     Int  @id @default(autoincrement())
+  is_locked Int?
+}
+
+model posts {
+  id         Int      @id @default(autoincrement())
+  user_id    Int?
+  title      String?
+  body       String?  @default("")
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
+
+  @@index([title], name: "title")
+  @@index([user_id], name: "user_id")
+}
+
+model users {
+  id         Int      @id @default(autoincrement())
+  name       String?  @unique
+  active     Boolean? @default(true)
+  username   String?
+  email      String?
+  updated_at DateTime @default(now())
+  created_at DateTime @default(now())
+
+  @@index([email], name: "email")
+  @@index([name], name: "name")
+  @@index([username], name: "username")
+}
