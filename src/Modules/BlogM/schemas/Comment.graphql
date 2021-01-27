@@ -1,0 +1,18 @@
+	"Схема комментариев"
+	type CommentQ {
+		id: Int
+		name: String
+		post_id: Int
+		email: String
+		body: String
+		updated_at: String
+		created_at: String
+	}
+
+	input CommentM {
+		id: Int
+		post_id: Int
+		name: String
+		email: String
+		body: String
+	}

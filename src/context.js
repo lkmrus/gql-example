@@ -1,24 +1,31 @@
-const { PrismaClient } = require('@prisma/client');
-const cookie = require('cookie');
-const { verify } = require('jsonwebtoken');
+import { PrismaClient } from '@prisma/client';
+import { verify } from 'jsonwebtoken';
 
 const db = new PrismaClient();
 
-function getUser(req) {
-    // const token = cookie.parse(req.headers.cookie || "")["auth.token"];
+/**
+ * Получаем пользователя по токену
+ * */
+async function getUser(req) {
+	const token = req?.cookies?.token || req?.headers?.authorization;
+	if (token) {
+		const payload = verify(token, 'supersecretkey'); // проверяем токен
 
-    // if (token) {
-        // const verifiedToken = verify(token, "supersecretkey");
-        // return prisma.user.findOne({ where: { id: verifiedToken.userId } });
-    // }
+		const idUser = payload?.sub;
+		const user = await db.users.findFirst({ where: { id: idUser } });
 
-    // return null;
+		if (idUser) {
+			if (user.isBanned) throw new Error('Bye!');
+			return user;
+		}
+	}
+	return null;
 }
 
-const createContext = async (ctx) => ({
-    ...ctx,
-    db,
-    user: await getUser(ctx.req),
+const context = async (ctx) => ({
+	...ctx,
+	db,
+	user: await getUser(ctx.req),
 });
 
-module.exports = { getUser, createContext };
+export { context };

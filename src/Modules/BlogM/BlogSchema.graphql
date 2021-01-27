@@ -1,0 +1,30 @@
+	type Query {
+		"Users"
+		getUserList: [UserQ]!
+		getUser(id: Int!): UserQ
+
+		"Posts"
+		getPost(data: PostM!): [PostQ]
+		getPostList: [PostQ]
+
+		"Comments"
+		getCommentList: [CommentQ]
+		getCommentListByPost(post_id: Int!): [CommentQ]
+	}
+
+	type Mutation {
+		"Мутации пользователя"
+		addUser(data: UserM!): Boolean!
+		updateUser(id: Int!, data: UserM!): Boolean!
+		delUser(id: Int!): Boolean!
+
+		"Мутации постов"
+		addPost(data: PostM!): Boolean!
+		updatePost(id: Int!, data: PostM!): Boolean!
+		delPost(data: PostM!): Boolean!
+
+		"Мутации комментариев"
+		addComment(data: CommentM!): Boolean!
+		updateComment(id: Int!, data: CommentM!): Boolean!
+		delComment(data: CommentM!): Boolean!
+	}

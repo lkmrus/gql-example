@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
-# cd /srv/graphql-crud/
+# cd /srv/prisma-example/
 # git stash
 # git pull
 npm i
-# npm i knex -g
-# npm run migration:down
-# npm run migration:latest
-# npm run seed:run
+# nxp prisma migrate dev --preview-feature
 npm run build
 NODE_ENV=production npm run start

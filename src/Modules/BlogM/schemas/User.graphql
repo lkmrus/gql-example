@@ -1,0 +1,15 @@
+type UserQ {
+		id: Int!
+		name: String
+		email: String
+		active: Boolean
+		username: String
+		updated_at: String
+		created_at: String
+}
+
+input UserM {
+	name: String
+	username: String
+	email: String
+}

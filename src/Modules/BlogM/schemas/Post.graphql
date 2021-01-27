@@ -1,0 +1,16 @@
+"Схема постов"
+	input PostM {
+		id: Int
+		user_id: Int
+		title: String
+		body: String
+	}
+
+	type PostQ {
+		id: Int
+		user_id: Int
+		title: String
+		body: String
+		updated_at: String
+		created_at: String
+	}

@@ -1,70 +1,30 @@
 import express from 'express';
-const app = express();
-import { createContext } from './context';
+import cors from 'cors';
+import { context } from './context';
 import session from 'express-session';
-import { ApolloServer, gql, makeExecutableSchema } from 'apollo-server-express';
-import { GraphQLDate, GraphQLDateTime, GraphQLTime } from 'graphql-iso-date';
+import depthLimit from 'graphql-depth-limit';
+import { ApolloServer } from 'apollo-server-express';
+import schema from './Modules/schemaWithResolvers';
+import * as bodyParser from 'body-parser';
 
-// Подключаем модули
-// import UserM from './Modules/User/UserM';
+const app = express();
 
 app.use(session({ secret: 'supersecretkey', cookie: { maxAge: 60000 } }));
 
-const typeDefs = gql`
-	scalar Date
-	scalar Time
-	scalar DateTime
-
-	type UserQ {
-		id: Int!
-		name: String
-		email: String
-		active: Boolean
-		username: String
-		updated_at: String
-		created_at: String
-	}
-
-	input UserM {
-		name: String
-		username: String
-		email: String
-	}
-
-	type Query {
-		getUserList: [UserQ]!
-		getUser(id: Int!): UserQ
-	}
-
-	type Mutation {
-		"Мутации пользователя"
-		addUser(user: UserM!): Boolean!
-		updateUser(id: Int!, user: UserM!): Boolean!
-		delUser(id: Int!): Boolean!
-	}
-`;
-
-const resolvers = {
-	Date: GraphQLDate,
-	Time: GraphQLTime,
-	DateTime: GraphQLDateTime,
-
-	// Query,
-	// Mutation,
-};
-
-const schema = makeExecutableSchema({ typeDefs, resolvers });
-
 const server = new ApolloServer({
 	schema,
-	context: createContext,
+	context,
 	introspection: true,
 	playground: true,
+	validationRules: [depthLimit(10)],
 	cors: {
 		origin: 'http://localhost:4000',
 		credentials: true,
 	},
 });
+
+app.use('*', cors());
+app.get('/', (req, res) => res.send('GraphQL API'));
 
 server.applyMiddleware({ app, path: '/api' });
 
