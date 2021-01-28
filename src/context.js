@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { verify } from 'jsonwebtoken';
 
-const db = new PrismaClient();
+const db = new PrismaClient(); // Инициализируем подключение к базе
 
 /**
  * Получаем пользователя по токену

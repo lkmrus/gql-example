@@ -1,5 +1,5 @@
 /**
- * задержка на нужное кол-во секунд
+ * Задержка на нужное кол-во секунд
  * @param sTimeMs
  */
 module.exports = function wait(sTimeMs) {

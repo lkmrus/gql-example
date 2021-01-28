@@ -5,7 +5,7 @@ import session from 'express-session';
 import depthLimit from 'graphql-depth-limit';
 import { ApolloServer } from 'apollo-server-express';
 import schema from './Modules/schemaWithResolvers';
-import * as bodyParser from 'body-parser';
+import { conf } from './Config/default';
 
 const app = express();
 
@@ -24,6 +24,7 @@ const server = new ApolloServer({
 });
 
 app.use('*', cors());
+
 app.get('/', (req, res) => res.send('GraphQL API'));
 
 server.applyMiddleware({ app, path: '/api' });

@@ -1,38 +1,44 @@
 "use strict";
 
-const {
-  PrismaClient
-} = require('@prisma/client');
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.context = undefined;
 
-const cookie = require('cookie');
+var _client = require("@prisma/client");
 
-const {
-  verify
-} = require('jsonwebtoken');
+var _jsonwebtoken = require("jsonwebtoken");
 
-const prisma = new PrismaClient();
+const db = new _client.PrismaClient();
+/**
+ * Получаем пользователя по токену
+ * */
 
-function getUser(req) {
-  const token = cookie.parse(req.headers.cookie || "")["auth.token"];
+async function getUser(req) {
+  const token = req?.cookies?.token || req?.headers?.authorization;
 
   if (token) {
-    const verifiedToken = verify(token, "supersecretkey");
-    return prisma.user.findOne({
+    const payload = (0, _jsonwebtoken.verify)(token, 'supersecretkey'); // проверяем токен
+
+    const idUser = payload?.sub;
+    const user = await db.users.findFirst({
       where: {
-        id: verifiedToken.userId
+        id: idUser
       }
     });
+
+    if (idUser) {
+      if (user.isBanned) throw new Error('Bye!');
+      return user;
+    }
   }
 
   return null;
 }
 
-const createContext = async ctx => ({ ...ctx,
-  prisma,
+const context = async ctx => ({ ...ctx,
+  db,
   user: await getUser(ctx.req)
 });
 
-module.exports = {
-  getUser,
-  createContext
-};
+exports.context = context;
